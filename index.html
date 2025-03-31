@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="style.css" />
+		<script src="index.js" defer></script>
+		<title>Opskrift Bloggen</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<h1>Opskrift Bloggen</h1>
+				<p class="tagline">
+					Din personlige samling af lækre opskrifter
+				</p>
+			</div>
+		</header>
+
+		<main class="container">
+			<section class="recipe-container">
+				<div class="section-header">
+					<h2>Lav en opskrift</h2>
+					<div class="section-divider"></div>
+				</div>
+
+				<form id="recipe-form">
+					<div class="form-group">
+						<label for="recipe-name">Navn på opskrift</label>
+						<input
+							type="text"
+							id="recipe-name"
+							name="recipe-name"
+							placeholder="F.eks. 'Kage'"
+							required
+						/>
+					</div>
+
+					<div class="form-group">
+						<label for="recipe-description"
+							>Beskrivelse (valgfrit)</label
+						>
+						<textarea
+							id="recipe-description"
+							name="recipe-description"
+							placeholder="Fortæl lidt om opskriften..."
+						></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="recipe-ingredients">Ingredienser</label>
+						<textarea
+							id="recipe-ingredients"
+							name="recipe-ingredients"
+							placeholder="Skriv hver ingrediens på en ny linje"
+							required
+						></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="recipe-instructions">Fremgangsmåde</label>
+						<textarea
+							id="recipe-instructions"
+							name="recipe-instructions"
+							placeholder="Beskriv trinene på separate linjer"
+							required
+						></textarea>
+					</div>
+
+					<button id="recipe-form-button" type="submit">
+						Gem opskrift
+					</button>
+				</form>
+			</section>
+
+			<section class="filter-section">
+				<div class="section-header">
+					<h2>Filter opskrifter</h2>
+					<div class="section-divider"></div>
+					<div class="filter-container">
+						<div class="filter-group">
+							<label for="filter-name">Navn</label>
+							<input
+								type="text"
+								id="filter-name"
+								name="filter-name"
+								placeholder="Søg efter opskrift..."
+							/>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="recipe-list">
+				<div class="section-header">
+					<h2>Mine opskrifter</h2>
+					<div class="section-divider"></div>
+				</div>
+				<div id="recipe-cards"></div>
+			</section>
+
+			<!-- Kommentar modal -->
+			<div id="comment-modal" class="modal">
+				<div class="modal-content">
+					<span class="close-modal">&times;</span>
+					<h3>Kommentarer</h3>
+
+					<div id="comments-list" class="comments-list"></div>
+
+					<form id="comment-form">
+						<div class="form-group">
+							<label for="comment-author">Dit navn</label>
+							<input type="text" id="comment-author" required />
+						</div>
+						<div class="form-group">
+							<label for="comment-text">Din kommentar</label>
+							<textarea id="comment-text" required></textarea>
+						</div>
+						<button type="submit">Tilføj kommentar</button>
+					</form>
+				</div>
+			</div>
+		</main>
+
+		<footer>
+			<div class="container">
+				<p>
+					&copy; 2025 Opskrift Bloggen - Din personlige
+					opskriftsamling
+				</p>
+			</div>
+		</footer>
+	</body>
+</html>
