@@ -208,7 +208,7 @@ button:hover {
 
 #recipe-cards {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 	gap: 2rem;
 	margin-top: 1.5rem;
 }
@@ -471,6 +471,7 @@ footer {
 	align-items: center;
 	gap: 0.5rem;
 	font-size: 0.9rem;
+	width: 100%;
 }
 
 .comment-button:hover {
@@ -511,4 +512,55 @@ footer {
 		margin: 20% auto;
 		padding: 1.5rem;
 	}
+}
+
+#ingredients-container {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.ingredient-row {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 8px;
+	align-items: center;
+}
+
+.ingredient-amount {
+	flex: 0 0 30%;
+}
+
+.ingredient-name {
+	flex: 1;
+}
+
+.remove-ingredient {
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 32px;
+	height: 32px;
+	cursor: pointer;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+#add-ingredient {
+	background-color: #2ecc71;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 5px 10px;
+	cursor: pointer;
+	margin-top: 5px;
+	font-weight: bold;
+	height: 50px;
+}
+
+#add-ingredient:hover {
+	background-color: #27ae60;
 }

@@ -49,12 +49,14 @@
 
 					<div class="form-group">
 						<label for="recipe-ingredients">Ingredienser</label>
-						<textarea
-							id="recipe-ingredients"
-							name="recipe-ingredients"
-							placeholder="Skriv hver ingrediens på en ny linje"
-							required
-						></textarea>
+						<div id="ingredients-container">
+							<div class="ingredient-row">
+								<input type="text" class="ingredient-amount" placeholder="Mængde (fx 200g)" />
+								<input type="text" class="ingredient-name" placeholder="Ingrediens (fx mel)" required />
+								<button type="button" class="remove-ingredient">-</button>
+							</div>
+						</div>
+						<button type="button" id="add-ingredient">+ Tilføj ingrediens</button>
 					</div>
 
 					<div class="form-group">

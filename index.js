@@ -12,6 +12,10 @@ let recipes = JSON.parse(localStorage.getItem("recipes")) || [];
 let comments = JSON.parse(localStorage.getItem("comments")) || {};
 let currentRecipeIndex = null;
 
+// Ingrediens håndtering
+const addIngredientBtn = document.getElementById("add-ingredient");
+const ingredientsContainer = document.getElementById("ingredients-container");
+
 function renderRecipeCards() {
 	recipeCards.innerHTML = "";
 
@@ -60,7 +64,7 @@ function renderRecipeCards() {
             <div class="recipe-details">
                 <div class="recipe-section">
                     <h4>Ingredienser</h4>
-                    <p>${recipe.ingredients.replace(/\n/g, "<br>")}</p>
+                    <p>- ${recipe.ingredients.replace(/\n/g, "<br> - ")}</p>
                 </div>
                 
                 <div class="recipe-section">
@@ -143,7 +147,7 @@ function handleEdit(e) {
 	// Udfyld formularen med eksisterende data
 	document.getElementById("recipe-name").value = recipe.name;
 	document.getElementById("recipe-description").value = recipe.description;
-	document.getElementById("recipe-ingredients").value = recipe.ingredients;
+	populateIngredientRows(recipe.ingredients);
 	document.getElementById("recipe-instructions").value = recipe.instructions;
 
 	// Skift knappen til "Opdater"
@@ -233,7 +237,7 @@ recipeForm.addEventListener("submit", (e) => {
 
 	const name = document.getElementById("recipe-name").value;
 	const description = document.getElementById("recipe-description").value;
-	const ingredients = document.getElementById("recipe-ingredients").value;
+	const ingredients = collectIngredients();
 	const instructions = document.getElementById("recipe-instructions").value;
 
 	if (name && ingredients && instructions) {
@@ -249,6 +253,16 @@ recipeForm.addEventListener("submit", (e) => {
 
 		// Nulstil formularen
 		recipeForm.reset();
+		
+		// Nulstil ingrediensrækker til kun én tom række
+		ingredientsContainer.innerHTML = `
+            <div class="ingredient-row">
+                <input type="text" class="ingredient-amount" placeholder="Mængde (fx 200g)" />
+                <input type="text" class="ingredient-name" placeholder="Ingrediens (fx mel)" required />
+                <button type="button" class="remove-ingredient">-</button>
+            </div>
+        `;
+		
 		localStorage.setItem("recipes", JSON.stringify(recipes));
 		renderRecipeCards();
 	}
@@ -290,5 +304,102 @@ window.addEventListener("load", () => {
 		});
 	}, 300);
 });
+
+// Tilføj event listener til "Tilføj ingrediens" knappen
+if (addIngredientBtn) {
+	addIngredientBtn.addEventListener("click", addIngredientRow);
+}
+
+// Initialiser eventlistener til "fjern" knapper
+document.addEventListener("click", (e) => {
+	if (e.target.classList.contains("remove-ingredient")) {
+		if (document.querySelectorAll(".ingredient-row").length > 1) {
+			e.target.closest(".ingredient-row").remove();
+		} else {
+			alert("Der skal være mindst én ingrediens");
+		}
+	}
+});
+
+// Funktion til at tilføje en ny ingrediensrække
+function addIngredientRow() {
+	const row = document.createElement("div");
+	row.className = "ingredient-row";
+	row.innerHTML = `
+        <input type="text" class="ingredient-amount" placeholder="Mængde (fx 200g)" />
+        <input type="text" class="ingredient-name" placeholder="Ingrediens (fx mel)" required />
+        <button type="button" class="remove-ingredient">-</button>
+    `;
+	ingredientsContainer.appendChild(row);
+}
+
+// Funktion til at samle ingredienser fra formularen
+function collectIngredients() {
+	const rows = document.querySelectorAll(".ingredient-row");
+	let ingredients = [];
+	
+	rows.forEach(row => {
+		const amount = row.querySelector(".ingredient-amount").value.trim();
+		const name = row.querySelector(".ingredient-name").value.trim();
+		
+		if (name) {
+			if (amount) {
+				ingredients.push(`${amount} ${name}`);
+			} else {
+				ingredients.push(name);
+			}
+		}
+	});
+	
+	return ingredients.join("\n");
+}
+
+// Funktion til at udfylde ingrediensrækker baseret på eksisterende ingredienser
+function populateIngredientRows(ingredientsText) {
+	// Fjern alle eksisterende rækker undtagen den første
+	const rows = document.querySelectorAll(".ingredient-row");
+	for (let i = 1; i < rows.length; i++) {
+		rows[i].remove();
+	}
+	
+	// Nulstil den første række
+	if (rows.length > 0) {
+		rows[0].querySelector(".ingredient-amount").value = "";
+		rows[0].querySelector(".ingredient-name").value = "";
+	}
+	
+	// Hvis der ikke er ingredienser, stop her
+	if (!ingredientsText) return;
+	
+	// Split ingredienserne på nye linjer
+	const ingredients = ingredientsText.split("\n");
+	
+	// For hver ingrediens, opret en ny række eller udfyld den første
+	ingredients.forEach((ingredient, index) => {
+		let row;
+		
+		if (index === 0 && rows.length > 0) {
+			row = rows[0];
+		} else {
+			addIngredientRow();
+			row = document.querySelectorAll(".ingredient-row")[index];
+		}
+		
+		// Opdel ingrediensen i mængde og navn
+		const parts = ingredient.trim().match(/^([\d.,\/\s]+\s*[a-zæøåA-ZÆØÅ]*)\s+(.+)$/);
+		
+		if (parts) {
+			row.querySelector(".ingredient-amount").value = parts[1].trim();
+			row.querySelector(".ingredient-name").value = parts[2].trim();
+		} else {
+			row.querySelector(".ingredient-name").value = ingredient.trim();
+		}
+	});
+}
+
+// Sørg for at have mindst én ingrediensrække ved start
+if (ingredientsContainer && ingredientsContainer.children.length === 0) {
+	addIngredientRow();
+}
 
 renderRecipeCards();
